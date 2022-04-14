@@ -132,10 +132,10 @@ def pregunta_03():
             dictQ3[key] = [value]
     # pp.pprint(dictQ3)
 
-    # print('\nstep 3: creating a list that contains summation of list for each dictionary key')
-    resultQ3 = [] 
+    # print('\nstep 3: creating a tuple's list that contains summation of list for each dictionary key')
+    resultQ3 = []
     for key in dictQ3.keys():
-        resultQ3.append( [key,sum(dictQ3[key])] )
+        resultQ3.append( (key,sum(dictQ3[key])) )
 
     # print('\nstep 4: sorted list for firts element of tuple')
     resultQ3 = sorted(resultQ3,key=itemgetter(0), reverse=False)
