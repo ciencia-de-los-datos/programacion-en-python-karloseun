@@ -9,8 +9,31 @@ básicas.
 
 Utilice el archivo `data.csv` para resolver las preguntas.
 
-
 """
+import pprint
+from operator import itemgetter
+import re
+
+pp = pprint.PrettyPrinter() 
+path = 'data.csv'
+
+# load and clean file
+def preparedFile(path):
+
+    dataFile = []
+
+    # print('\nstep 1: reading file !')
+    with open(path, 'r') as file:
+        dataFile = file.readlines()
+
+    # print('\nstep 2: cleaning file !')
+    dataFile = [line.strip().split('\t') for line in dataFile]
+    
+    # print('\nstep 3: summary !')
+    # print('\tlines:',len(dataFile))
+    # pp.pprint(dataFile)
+    
+    return dataFile
 
 
 def pregunta_01():
@@ -21,7 +44,13 @@ def pregunta_01():
     214
 
     """
-    return
+    # print('\nstep 0: obtain data')    
+    data = preparedFile(path)
+    
+    suma = 0
+    [ suma:= suma + int(row[1]) for row in data ]
+    
+    return suma
 
 
 def pregunta_02():
@@ -39,8 +68,35 @@ def pregunta_02():
     ]
 
     """
-    return
 
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify row zero (0)')
+    data = [row[0] for row in data]
+    # print(data)
+
+    # print('\nstep 2: creating dictionary > Key (column A), Value: how many times the letter of column A appears')
+    result = dict()
+    for letra in data:
+        if letra in result.keys(): # si la letra esta en la lista de claves del diccionario
+            result[letra] = result[letra] + 1
+        else:
+            result[letra] = 1
+
+    # print('\nstep 3: put the result in a tuple')
+    tuplas = [(key, valor) for key, valor in result.items()]
+    # print(tuplas)
+    # print(*tuplas,sep="\n")
+
+    # print('\nstep 4: sort tuples by first column, ASC')
+    tuplas = sorted(tuplas, key=itemgetter(0), reverse=False)
+    # pp.pprint(tuplas)
+
+    # print('\nstep 5: display result vertically')
+    # print(*tuplas,sep="\n")
+    
+    return tuplas
 
 def pregunta_03():
     """
@@ -57,7 +113,37 @@ def pregunta_03():
     ]
 
     """
-    return
+
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+    
+    # print('\nstep 1: extracting the first two items for each list')
+    data = [row[:2] for row in data]
+    # print(data)
+
+    # print('\nstep 2: creating dictionary key (column A), value (column B)')
+    dictQ3 = {}
+    for key, value in data:
+
+        value = int(value)        
+        if key in dictQ3.keys():
+            dictQ3[key].append(value)
+        else:
+            dictQ3[key] = [value]
+    # pp.pprint(dictQ3)
+
+    # print('\nstep 3: creating a tuple's list that contains summation of list for each dictionary key')
+    resultQ3 = []
+    for key in dictQ3.keys():
+        resultQ3.append( (key,sum(dictQ3[key])) )
+
+    # print('\nstep 4: sorted list for firts element of tuple')
+    resultQ3 = sorted(resultQ3,key=itemgetter(0), reverse=False)
+
+    # print('\nstep 5: display result!')
+    # print(resultQ3)
+
+    return resultQ3
 
 
 def pregunta_04():
@@ -82,7 +168,39 @@ def pregunta_04():
     ]
 
     """
-    return
+
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: extracting the first three items for each list')
+    data = [row[:3] for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: attach new item> month for each list in data')
+    for i in data:
+        # print(i[2])
+        # print( (i[2].split("-"))[1] )
+        i.append( (i[2].split("-"))[1] )
+    # print(data)
+
+    # print('\nstep 3: creating dictionary key > month, value > times for month')
+    dictQ4 = {}
+    for i in data:
+        month = str(i[3])
+        if month in dictQ4.keys():
+            dictQ4[month] = dictQ4[month] + 1
+        else:
+            dictQ4[month] = 1
+    # print(dictQ4)
+
+    # sort dictionary
+    dictQ4 = dict(sorted(dictQ4.items()))
+
+    #convert dict to list
+    listQ4 = sorted(list(dictQ4.items()), key=itemgetter(0), reverse=False)
+    
+    
+    return listQ4
 
 
 def pregunta_05():
@@ -100,7 +218,38 @@ def pregunta_05():
     ]
 
     """
-    return
+
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify data set !')
+    data = [row[:2]for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: create dictionary > key (column A), value (list of elements column B)')
+    dictQ5 = {}
+    for key, value in data:
+        value = int(value)
+        if key in dictQ5.keys():
+            dictQ5[key].append(value)
+        else:
+            dictQ5[key] = [value]
+    # pp.pprint(dictQ5)
+
+    # print('\nstep 3: extract values MIN and MAX from dataset for each dictionary value')
+    resuktQ5 = []
+    for k in dictQ5.keys():
+        resuktQ5.append( (k,max(dictQ5[k]),min(dictQ5[k])) )
+    # print(resuktQ5)
+
+    # print('\nstep 4: sorted list for first element of tuple ')
+    resuktQ5 = sorted(resuktQ5, key=itemgetter(0), reverse=False)
+    # print(resuktQ5)
+
+    # print('\nstep 5: display result ')
+    # print(*resuktQ5,sep="\n")
+        
+    return resuktQ5
 
 
 def pregunta_06():
@@ -125,7 +274,44 @@ def pregunta_06():
     ]
 
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify data set !')
+    data = [row[:5]for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: comprenhension for create a list of items (key:value) of dictionary !')
+    listQ6 = []
+    [ listQ6 := listQ6 + ((i[4]).split(",")) for i in data ]
+    # print(listQ6)
+    
+    # print('\nstep 3: comprenhension for create a list of lists for codificacion: key:value !')
+    llistQ6 = []
+    # [ llistQ6.append(i.split(":")) for i in listQ6 ]
+    llistQ6 = [ i.split(":") for i in listQ6 ]
+    # print(llistQ6)
+    
+    # print('\nstep 4: creating dictionary from list of lists !')
+    dictQ6 = {}
+    for key, value in llistQ6:
+        if key in dictQ6.keys():
+            dictQ6[key].append(int(value))
+        else:
+            dictQ6[key] = [int(value)]
+    
+    # pp.pprint(dictQ6)
+
+    # print('\nstep 5: list comprenhension for extratc MIN, MAX values of dictionary !')
+    resultQ6 = []    
+    # [ resultQ6.append( (key, min(dictQ6[key]), max(dictQ6[key])) ) for key in dictQ6.keys() ]
+    resultQ6 = [ (key, min(dictQ6[key]), max(dictQ6[key])) for key in dictQ6.keys() ]
+    
+    # print('\nstep 6: sorted list !')
+    # pp.pprint( sorted(resultQ6,key=itemgetter(0),reverse=False) )
+    resultQ6 = sorted(resultQ6,key=itemgetter(0),reverse=False)
+
+    return resultQ6
 
 
 def pregunta_07():
@@ -149,7 +335,25 @@ def pregunta_07():
     ]
 
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify data set !')
+    data = [row[:2]for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: creating dictionary !')
+    dictQ7 = {}
+    for v,k in data:
+        k = int(k) 
+        if k in dictQ7.keys():
+            dictQ7[k].append(v)
+        else:
+            dictQ7[k] = [v]
+
+    # print('\nstep 3: convert dict to list and then, sorted and return')
+
+    return sorted(list(dictQ7.items()), key=itemgetter(0), reverse=False)
 
 
 def pregunta_08():
@@ -174,7 +378,27 @@ def pregunta_08():
     ]
 
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify data set !')
+    data = [row[:2]for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: creating dictionary !')
+    dictQ8 = {}
+    for v,k in data:
+        k = int(k) 
+        if k in dictQ8.keys():
+            dictQ8[k].append(v)
+        else:
+            dictQ8[k] = [v]
+    
+    listQ8 = []
+    listQ8 = [ (key, sorted(set(dictQ8[key]))) for key in dictQ8 ]
+    listQ8 = sorted(listQ8,key=itemgetter(0),reverse=False)
+
+    return listQ8
 
 
 def pregunta_09():
@@ -197,7 +421,45 @@ def pregunta_09():
     }
 
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    # print('\nstep 1: verify data set !')
+    data = [row[:5]for row in data]
+    # pp.pprint(data)
+
+    # print('\nstep 2: comprenhension for create a list of items (key:value) of dictionary !')
+    listQ9 = []
+    [ listQ9 := listQ9 + ((i[4]).split(",")) for i in data ]
+    # print(listQ9)
+    
+    # print('\nstep 3: comprenhension for create a list of lists for codificacion: key:value !')
+    llistQ9 = []
+    llistQ9 = [ i.split(":") for i in listQ9 ]
+    # print(llistQ9[:11])
+    
+    # print('\nstep 4: creating dictionary from list of lists !')
+    dictQ9 = {}
+    for key, value in llistQ9:
+        if key in dictQ9.keys():
+            dictQ9[key].append(int(value))
+        else:
+            dictQ9[key] = [int(value)]
+    # pp.pprint(dictQ9)
+
+    # print('\nstep 5: len of values of dictionary !')
+    resultQ9 = []
+    resultQ9 = [ (key, len(dictQ9[key]) ) for key in dictQ9.keys() ]
+    # print(resultQ9)
+
+    # print('\nstep 6: sorted list !')
+    resultQ9 = sorted(resultQ9,key=itemgetter(0),reverse=False)
+
+    # print('\nstep 7: dict comprenhension for convert list to dictionary !')
+    dictRQ9 = { i[0] : i[1] for i in resultQ9 }
+    # pp.pprint(dictRQ9)
+
+    return dictRQ9
 
 
 def pregunta_10():
@@ -216,9 +478,16 @@ def pregunta_10():
         ("E", 3, 3),
     ]
 
-
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+    # pp.pprint(data)
+
+    # print('\nstep 1: list comprenhension por LEN list !')
+    data = [  ( row[0], len(row[3].split(",")), len(row[4].split(",")) ) for row in data ]
+    # pp.pprint(data)
+
+    return data
 
 
 def pregunta_11():
@@ -237,9 +506,30 @@ def pregunta_11():
         "g": 35,
     }
 
-
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+    # pp.pprint(data)
+    # print( (data[0])[3], (data[0])[1] )
+
+    dictQ11 = {}
+    cont = 0
+    
+    for _ in data:
+        key = (data[cont])[3]
+        value = int((data[cont])[1])
+        cont += 1
+
+        for i in key.split(","):
+            if ( i in dictQ11.keys() ):
+                dictQ11[i] += value
+            else:
+                dictQ11[i] = value
+
+    # print(dictQ11)
+    dictQ11 = dict(sorted(dictQ11.items()))
+
+    return dictQ11
 
 
 def pregunta_12():
@@ -257,4 +547,54 @@ def pregunta_12():
     }
 
     """
-    return
+    # print('\nstep 0: obtain data')
+    data = preparedFile(path)
+
+    dictQ12 = {}
+    cont = 0
+    
+    for _ in data:
+        key = (data[cont])[0]
+        value = str((data[cont])[4])
+        cont += 1
+        # print (key,":",value)
+        value = sum( [ int(i) for i in (re.findall(r"\d[0-9]*",value)) ] )
+
+        if key in dictQ12.keys():
+            dictQ12[key] = dictQ12[key] + value
+        else:
+            dictQ12[key] = value
+
+    dictQ12 = dict(sorted(dictQ12.items()))
+
+    return dictQ12
+
+"""
+# display responses
+print("* * * * * * * * * * * * * * * S O L U T I O N S   L A B 1 * * * * * * * * * * * * * * * * * *")
+print("\nResult_Question_01\n")
+print(pregunta_01()) # probando la respuesta
+print("\nResult_Question_02\n")
+pp.pprint(pregunta_02()) # probando la respuesta
+print("\nResult_Question_03\n")
+pp.pprint(pregunta_03()) # probando la respuesta
+print("\nResult_Question_04\n")
+pp.pprint(pregunta_04()) # probando la respuesta
+print("\nResult_Question_05\n")
+pp.pprint(pregunta_05()) # probando la respuesta
+print("\nResult_Question_06\n")
+pp.pprint(pregunta_06()) # probando la respuesta
+print("\nResult_Question_07\n")
+pp.pprint(pregunta_07()) # probando la respuesta
+print("\nResult_Question_08\n")
+pp.pprint(pregunta_08()) # probando la respuesta
+print("\nResult_Question_09\n")
+pp.pprint(pregunta_09()) # probando la respuesta
+print("\nResult_Question_10\n")
+pp.pprint(pregunta_10()) # probando la respuesta
+print("\nResult_Question_11\n")
+pp.pprint(pregunta_11()) # probando la respuesta
+print("\nResult_Question_12\n")
+pp.pprint(pregunta_12()) # probando la respuesta
+print("\n\n\n\n")
+"""
