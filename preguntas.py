@@ -15,7 +15,7 @@ from operator import itemgetter
 import re
 
 pp = pprint.PrettyPrinter() 
-path = '/Users/carlose/Documents/GitHub/programacion-en-python-karloseun/data.csv'
+path = 'data.csv'
 
 # load and clean file
 def preparedFile(path):
